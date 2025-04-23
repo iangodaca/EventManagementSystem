@@ -1,0 +1,41 @@
+﻿@model IEnumerable<EventManagementSystem.Models.Entities.Event>
+@{
+    ViewData["Title"] = "Events List";
+}
+
+<h2>Events</h2>
+
+<a class="btn btn-primary mb-3" href="/Events/Create">Add New Event</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Attendees</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var evt in Model)
+        {
+            <tr>
+                <td>@evt.EventTitle</td>
+                <td>@evt.EventDescription</td>
+                <td>@evt.EventLocation</td>
+                <td>@evt.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@evt.EventCategory</td>
+                <td>@evt.AttendeeCount</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-controller="Events" asp-action="Delete" asp-route-id="@evt.Id"
+                       onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

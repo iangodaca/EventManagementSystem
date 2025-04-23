@@ -1,0 +1,36 @@
+﻿@model EventManagementSystem.Models.Entities.Event
+
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<h2>Edit Event</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="EventTitle"></label>
+        <input asp-for="EventTitle" class="form-control" />
+    </div>
+    <div>
+        <label asp-for="EventDescription"></label>
+        <input asp-for="EventDescription" class="form-control" />
+    </div>
+    <div>
+        <label asp-for="EventLocation"></label>
+        <input asp-for="EventLocation" class="form-control" />
+    </div>
+    <div>
+        <label asp-for="EventDate"></label>
+        <input asp-for="EventDate" type="datetime-local" class="form-control" />
+    </div>
+    <div>
+        <label asp-for="EventCategory"></label>
+        <input asp-for="EventCategory" class="form-control" />
+    </div>
+    <div>
+        <label asp-for="AttendeeCount"></label>
+        <input asp-for="AttendeeCount" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success mt-2">Save Changes</button>
+</form>
