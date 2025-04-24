@@ -1,5 +1,4 @@
-﻿﻿@using Microsoft.EntityFrameworkCore
-@model List<EventManagementSystem.Models.Entities.Report>
+﻿@model List<EventManagementSystem.Models.Entities.Report>
 
 @{
     ViewData["Title"] = "Monthly Event Report";
@@ -33,40 +32,9 @@
         </div>
     </form>
 
-    <!-- Dashboard Stats: Total Events, Users, etc. -->
-    <div class="d-flex justify-content-lg-around gap-4 mt-3">
-        <div class="bg-white p-4 rounded shadow text-center w-100">
-            <h5 class="font-semibold text-lg">Total Events</h5>
-            <p class="text-xl font-bold">@Model.Sum(r => r.Events.Count)</p>
-        </div>
-
-        <div class="bg-white p-4 rounded shadow text-center w-100">
-            <h5 class="font-semibold text-lg">Total Completed Events</h5>
-            <p class="text-xl font-bold">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Completed")</p>
-        </div>
-
-        <div class="bg-white p-4 rounded shadow text-center w-100">
-            <h5 class="font-semibold text-lg">Total Upcoming Events</h5>
-            <p class="text-xl font-bold">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Upcoming")</p>
-        </div>
-
-    </div>
-    <div class="d-flex justify-content-lg-around mt-3 gap-4">
-        <div class="bg-white p-4 rounded shadow text-center w-50" style="height:350px">
-            <canvas id="categoryPieChart" width="400" height="400"></canvas>
-        </div>
-
-        <!-- Bar Chart: Events by Month -->
-        <div class="bg-white p-4 rounded shadow text-center w-100" style="height:350px">
-            <canvas id="eventsBarChart" width="400" height="400"></canvas>
-        </div>
-    </div>
-
-    <!-- Pie Chart: Event Categories -->
-    <!-- Table: Monthly Event List -->
-    <div class="bg-white p-4 rounded shadow text-center w-100 mt-3">
-        @foreach (var month in Model)
-        {
+    @foreach (var month in Model)
+    {
+        <div class="mb-8">
             <h2 class="text-xl font-semibold mb-3">@($"{month.Year}-{month.Month:D2}")</h2>
             <table class="w-100 bg-white border border-gray-200 shadow-sm mb-2">
                 <thead class="bg-gray-100 text-sm font-semibold">
@@ -106,25 +74,11 @@
         }
     });
 
-    // Bar Chart: Total Events by Month
-    const eventsBarChartCtx = document.getElementById('eventsBarChart').getContext('2d');
-    new Chart(eventsBarChartCtx, {
-        type: 'bar',
-        data: {
-            labels: @Html.Raw(Json.Serialize(ViewBag.Months)),
-            datasets: [{
-                label: 'Total Events',
-                data: @Html.Raw(Json.Serialize(ViewBag.TotalEventsByMonth)),
-                backgroundColor: '#4CAF50',
-                borderColor: '#388E3C',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                x: { beginAtZero: true }
-            }
-        }
-    });
-</script>
+    h4 {
+        font-weight: 600;
+    }
+
+    .container {
+        max-width: 900px;
+    }
+</style>

@@ -18,5 +18,18 @@ namespace EventManagementSystem.Models.Entities
         [ForeignKey("OwnerId")]
         public AppUser? Owner { get; set; }
 
+    public string ComputedStatus
+        {
+            get
+            {
+                if (EventDate < DateTime.Now)
+                    return "Completed";
+                else if (EventDate.Date == DateTime.Now.Date)
+                    return "Ongoing";
+                else
+                    return "Upcoming";
+            }
+        }
     }
 }
+    
