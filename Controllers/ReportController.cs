@@ -20,12 +20,23 @@ public class ReportController : Controller
     [Authorize]
     public async Task<IActionResult> Index(string? search, string? category, DateTime? fromDate, DateTime? toDate)
     {
+        // Get the monthly event report with additional data for charts
         var report = await GetMonthlyEventReportAsync(search, category, fromDate, toDate);
+        var eventCategories = await GetEventCategoriesAsync(search, category, fromDate, toDate); // Fetch event categories data
 
+        // Preparing the data for the charts
         ViewBag.Search = search;
         ViewBag.Category = category;
         ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
         ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");
+
+        // Pie chart data for event categories
+        ViewBag.CategoryData = eventCategories.Select(c => c.Count).ToArray();
+        ViewBag.CategoryLabels = eventCategories.Select(c => c.Category).ToArray();
+
+        // Bar chart data for total events by month
+        ViewBag.Months = report.Select(r => $"{r.Year}-{r.Month:D2}").ToArray();
+        ViewBag.TotalEventsByMonth = report.Select(r => r.Events.Count).ToArray();
 
         return View(report);
     }
@@ -58,4 +69,34 @@ public class ReportController : Controller
 
         return grouped;
     }
+
+    // Fetch event categories for the pie chart
+    private async Task<List<EventCategoryCount>> GetEventCategoriesAsync(string? search, string? category, DateTime? fromDate, DateTime? toDate)
+    {
+        var events = await _context.Events
+            .Where(e =>
+                (string.IsNullOrEmpty(search) || e.EventTitle!.Contains(search)) &&
+                (string.IsNullOrEmpty(category) || e.EventCategory == category) &&
+                (!fromDate.HasValue || e.EventDate >= fromDate.Value) &&
+                (!toDate.HasValue || e.EventDate <= toDate.Value))
+            .ToListAsync();
+
+        var categoryCounts = events
+            .GroupBy(e => e.EventCategory)
+            .Select(g => new EventCategoryCount
+            {
+                Category = g.Key,
+                Count = g.Count()
+            })
+            .ToList();
+
+        return categoryCounts;
+    }
+
+    public class EventCategoryCount
+    {
+        public string? Category { get; set; }
+        public int Count { get; set; }
+    }
+
 }

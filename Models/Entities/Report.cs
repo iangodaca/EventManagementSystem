@@ -13,5 +13,11 @@
         public string Title { get; set; } = string.Empty;
         public DateTime Date { get; set; }
         public int AttendeeCount { get; set; }
+
+        public string Status => Date < DateTime.Now
+            ? "Completed"
+            : Date.Date == DateTime.Today
+                ? "Ongoing"
+                : "Upcoming";
     }
 }
