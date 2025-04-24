@@ -9,7 +9,7 @@
     <div class="col-md-6 col-lg-4">
         <section class="login-form-container">
             <form id="account" method="post" class="login-form">
-                <h1 class="text-center">@ViewData["Title"]</h1>
+                <h1 class="text-center h3">@ViewData["Title"]</h1>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
@@ -62,7 +62,7 @@
     }
 
     /* Log In Title */
-    h1 {
+    form h1 {
         color: #2c3e50;
         font-size: 7rem; /* Increased font size for the log in title */
         font-weight: bold;
@@ -109,7 +109,7 @@
         }
 
     /* Links Style */
-    a {
+    form a {
         color: #3498db;
         font-weight: 600;
         text-decoration: none;
@@ -121,7 +121,6 @@
 
     /* Text center for the links */
     .text-center {
-        font-size: 2.5rem;
         color: darkblue;
     }
     .text-centers {
