@@ -102,6 +102,13 @@
         max-width: 900px;
     }
 
+.event-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Limit to 3 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Add ellipsis to indicate truncated text */
+    }
     /* Additional styles for card and button positioning */
     .card-body {
         display: flex;
