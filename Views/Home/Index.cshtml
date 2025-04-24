@@ -2,7 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4 fw-bold text-primary">Welcome to <span class="text-dark">Eventive</span></h1>
+    <p class="lead text-secondary">
+        Your all-in-one platform for discovering and managing events effortlessly.
+    </p>
+    <a href="/Events" class="btn btn-lg btn-outline-primary mt-3">
+        Explore Events <i class="bi bi-calendar-event ms-2"></i>
+    </a>
+</div>
+
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="/image/eventsystem.jpg" alt="Event Banner"
+                 class="img-fluid shadow"
+                 style="height: 300px; width: 350px; border-radius: 50%; object-fit: cover;" />
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="text-primary">Why Choose Eventive?</h2>
+            <p class="text-muted">
+                Eventive is designed to simplify your event experience. From registration to reminders,
+                we’ve got every detail covered — whether you’re an organizer or an attendee.
+            </p>
+            <ul class="list-unstyled text-muted">
+                <li><i class="bi bi-check2-circle text-success me-2"></i> Effortless Event Creation</li>
+                <li><i class="bi bi-check2-circle text-success me-2"></i> Easy Ticketing & Registration</li>
+                <li><i class="bi bi-check2-circle text-success me-2"></i> Real-Time Notifications</li>
+                <li><i class="bi bi-check2-circle text-success me-2"></i> Clean, Responsive Interface</li>
+            </ul>
+        </div>
+    </div>
 </div>

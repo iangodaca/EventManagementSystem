@@ -4,33 +4,59 @@
     ViewData["Title"] = "Edit Event";
 }
 
-<h2>Edit Event</h2>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0">Edit Event</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="EventTitle"></label>
-        <input asp-for="EventTitle" class="form-control" />
+                        <div class="mb-3">
+                            <label asp-for="EventTitle" class="form-label fw-semibold"></label>
+                            <input asp-for="EventTitle" class="form-control" placeholder="Enter event title" />
+                            <span asp-validation-for="EventTitle" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EventDescription" class="form-label fw-semibold"></label>
+                            <textarea asp-for="EventDescription" class="form-control" rows="3" placeholder="Describe the event"></textarea>
+                            <span asp-validation-for="EventDescription" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EventLocation" class="form-label fw-semibold"></label>
+                            <input asp-for="EventLocation" class="form-control" placeholder="Event location" />
+                            <span asp-validation-for="EventLocation" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EventDate" class="form-label fw-semibold"></label>
+                            <input asp-for="EventDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="EventDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EventCategory" class="form-label fw-semibold"></label>
+                            <input asp-for="EventCategory" class="form-control" placeholder="e.g. Conference, Workshop" />
+                            <span asp-validation-for="EventCategory" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AttendeeCount" class="form-label fw-semibold"></label>
+                            <input asp-for="AttendeeCount" type="number" class="form-control" min="0" />
+                            <span asp-validation-for="AttendeeCount" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label asp-for="EventDescription"></label>
-        <input asp-for="EventDescription" class="form-control" />
-    </div>
-    <div>
-        <label asp-for="EventLocation"></label>
-        <input asp-for="EventLocation" class="form-control" />
-    </div>
-    <div>
-        <label asp-for="EventDate"></label>
-        <input asp-for="EventDate" type="datetime-local" class="form-control" />
-    </div>
-    <div>
-        <label asp-for="EventCategory"></label>
-        <input asp-for="EventCategory" class="form-control" />
-    </div>
-    <div>
-        <label asp-for="AttendeeCount"></label>
-        <input asp-for="AttendeeCount" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-success mt-2">Save Changes</button>
-</form>
+</div>

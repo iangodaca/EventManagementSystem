@@ -46,3 +46,38 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.navbar {
+    transition: all 0.3s ease-in-out;
+}
+
+    .navbar:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+.nav-link:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+}
+
+#scrollTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    z-index: 999;
+}
+
+body {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
