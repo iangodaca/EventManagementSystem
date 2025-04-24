@@ -3,6 +3,7 @@ using EventManagementSystem.Data;
 using EventManagementSystem.Models.Entities;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementSystem.Controllers
 {
@@ -37,13 +38,40 @@ namespace EventManagementSystem.Controllers
             return View(evt);
         }
         [Authorize]
-
-        // GET: /Events
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? search, string? category, DateTime? fromDate, DateTime? toDate)
         {
-            var events = _context.Events.ToList();
-            return View(events);
+            var categories = await _context.Events
+                .Where(e => !string.IsNullOrEmpty(e.EventCategory))
+                .Select(e => e.EventCategory)
+                .Distinct()
+                .ToListAsync();
+
+            ViewBag.Categories = categories;
+
+            var events = _context.Events.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+                events = events.Where(e => e.EventTitle!.Contains(search));
+
+            if (!string.IsNullOrEmpty(category))
+                events = events.Where(e => e.EventCategory == category);
+
+            if (fromDate.HasValue)
+                events = events.Where(e => e.EventDate >= fromDate.Value);
+
+            if (toDate.HasValue)
+                events = events.Where(e => e.EventDate <= toDate.Value);
+
+            var result = await events.OrderBy(e => e.EventDate).ToListAsync();
+
+            ViewBag.Search = search;
+            ViewBag.Category = category;
+            ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
+            ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");
+
+            return View(result);
         }
+
         [Authorize]
 
         // GET: /Events/Edit/5
