@@ -43,7 +43,9 @@
         {
             <div class="card mb-4 shadow-sm border-0">
                 <!-- Placeholder image or evt.ImageUrl -->
-                <img src="/image/event_placeholder.jpg" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Event Image" />
+                <img src="@(string.IsNullOrEmpty(evt.ImagePath) ? "/image/event_placeholder.jpg" : evt.ImagePath)"
+                     class="card-img-top" style="height: 200px; object-fit: cover;" alt="Event Image" />
+
 
                 <div class="card-body">
                     <h5 class="card-title text-primary">@evt.EventTitle</h5>

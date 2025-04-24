@@ -4,6 +4,7 @@ using EventManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventManagementSystem.Migrations.EventDb
 {
     [DbContext(typeof(EventDbContext))]
-    partial class EventDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424044945_adding ownership of events")]
+    partial class addingownershipofevents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,9 +105,6 @@ namespace EventManagementSystem.Migrations.EventDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")

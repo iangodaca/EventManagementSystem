@@ -12,45 +12,58 @@
                     <h4 class="mb-0">Edit Event</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Edit" method="post">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
 
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Event Image (Optional)</label>
+                            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                        </div>
+                        <!-- Event Title -->
                         <div class="mb-3">
                             <label asp-for="EventTitle" class="form-label fw-semibold"></label>
                             <input asp-for="EventTitle" class="form-control" placeholder="Enter event title" />
                             <span asp-validation-for="EventTitle" class="text-danger"></span>
                         </div>
 
+                        <!-- Event Description -->
                         <div class="mb-3">
                             <label asp-for="EventDescription" class="form-label fw-semibold"></label>
                             <textarea asp-for="EventDescription" class="form-control" rows="3" placeholder="Describe the event"></textarea>
                             <span asp-validation-for="EventDescription" class="text-danger"></span>
                         </div>
 
+                        <!-- Event Location -->
                         <div class="mb-3">
                             <label asp-for="EventLocation" class="form-label fw-semibold"></label>
                             <input asp-for="EventLocation" class="form-control" placeholder="Event location" />
                             <span asp-validation-for="EventLocation" class="text-danger"></span>
                         </div>
 
+                        <!-- Event Date -->
                         <div class="mb-3">
                             <label asp-for="EventDate" class="form-label fw-semibold"></label>
                             <input asp-for="EventDate" type="datetime-local" class="form-control" />
                             <span asp-validation-for="EventDate" class="text-danger"></span>
                         </div>
 
+                        <!-- Event Category -->
                         <div class="mb-3">
                             <label asp-for="EventCategory" class="form-label fw-semibold"></label>
                             <input asp-for="EventCategory" class="form-control" placeholder="e.g. Conference, Workshop" />
                             <span asp-validation-for="EventCategory" class="text-danger"></span>
                         </div>
 
+                        <!-- Attendee Count -->
                         <div class="mb-3">
                             <label asp-for="AttendeeCount" class="form-label fw-semibold"></label>
                             <input asp-for="AttendeeCount" type="number" class="form-control" min="0" />
                             <span asp-validation-for="AttendeeCount" class="text-danger"></span>
                         </div>
 
+                        <!-- Image Upload (optional) -->
+
+                        <!-- Submit Button -->
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>

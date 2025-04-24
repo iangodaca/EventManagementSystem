@@ -16,7 +16,6 @@ namespace EventManagementSystem
             builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AuthDbContext>();
 
             // Add services to the container.
-            builder.Services.AddScoped<ReportServices>();
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews();
 

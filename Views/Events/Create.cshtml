@@ -6,43 +6,56 @@
 <div class="container mt-5">
     <h2 class="mb-4">@ViewData["Title"]</h2>
 
-    <form asp-action="Create" method="post" class="row g-3 needs-validation" novalidate>
+    <form asp-action="Create" method="post" class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
+        <!-- Image Upload -->
+        <div class="col-md-6">
+            <label class="form-label">Event Image</label>
+            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+        </div>
+
+        <!-- Event Title -->
         <div class="col-md-6">
             <label asp-for="EventTitle" class="form-label">Event Name</label>
             <input asp-for="EventTitle" class="form-control" required />
             <span asp-validation-for="EventTitle" class="text-danger"></span>
         </div>
 
+        <!-- Event Description -->
         <div class="col-md-6">
             <label asp-for="EventDescription" class="form-label">Event Description</label>
             <input asp-for="EventDescription" class="form-control" />
             <span asp-validation-for="EventDescription" class="text-danger"></span>
         </div>
 
+        <!-- Event Location -->
         <div class="col-md-6">
             <label asp-for="EventLocation" class="form-label">Event Location</label>
             <input asp-for="EventLocation" class="form-control" />
             <span asp-validation-for="EventLocation" class="text-danger"></span>
         </div>
 
+        <!-- Event Date -->
         <div class="col-md-6">
             <label asp-for="EventDate" class="form-label">Event Date</label>
             <input asp-for="EventDate" type="datetime-local" class="form-control" />
             <span asp-validation-for="EventDate" class="text-danger"></span>
         </div>
 
+        <!-- Event Category -->
         <div class="col-md-6">
             <label asp-for="EventCategory" class="form-label">Event Category</label>
             <input asp-for="EventCategory" class="form-control" />
             <span asp-validation-for="EventCategory" class="text-danger"></span>
         </div>
 
+        <!-- Attendee Count -->
         <div class="col-md-6">
             <label asp-for="AttendeeCount" class="form-label">Attendee Count</label>
             <input asp-for="AttendeeCount" type="number" class="form-control" />
             <span asp-validation-for="AttendeeCount" class="text-danger"></span>
         </div>
 
+        <!-- Submit and Cancel buttons -->
         <div class="col-12 mt-3">
             <button type="submit" class="btn btn-primary">Create Event</button>
             <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>

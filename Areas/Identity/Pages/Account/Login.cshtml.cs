@@ -93,7 +93,7 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
             }
             if (User.Identity.IsAuthenticated)
             {
-                Response.Redirect("/");
+                Response.Redirect("/Events/");
             }
             returnUrl ??= Url.Content("~/");
 
@@ -107,7 +107,7 @@ namespace EventManagementSystem.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Events/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
