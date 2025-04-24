@@ -70,6 +70,8 @@ button.accept-policy {
 
 body {
     animation: fadeIn 1s ease-in;
+    background-color: #e0f7fa; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 @keyframes fadeIn {
@@ -81,3 +83,4 @@ body {
         opacity: 1;
     }
 }
+

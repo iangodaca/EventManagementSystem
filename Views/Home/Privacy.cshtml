@@ -1,6 +1,66 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="text-muted">Last updated: April 24, 2025</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow-sm">
+        <section class="mb-4">
+            <h4 class="text-dark">1. Introduction</h4>
+            <p class="text-secondary">
+                At Eventive, your privacy is important to us. This privacy policy explains what personal information we collect,
+                how we use it, and the choices you have regarding your information.
+            </p>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">2. Information We Collect</h4>
+            <ul class="text-secondary">
+                <li>Personal information (name, email, contact info)</li>
+                <li>Event preferences and registration history</li>
+                <li>Usage data (pages visited, actions taken)</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">3. How We Use Your Information</h4>
+            <p class="text-secondary">
+                We use your information to provide event recommendations, send updates, and improve our services. We never sell your data.
+            </p>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">4. Your Rights</h4>
+            <p class="text-secondary">
+                You have the right to access, update, or delete your personal information at any time. Contact our support for assistance.
+            </p>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">5. Contact Us</h4>
+            <p class="text-secondary">
+                If you have questions about this policy, reach out at <a href="mailto:support@eventive.com">support@eventive.com</a>.
+            </p>
+        </section>
+    </div>
+</div>
+
+<style>
+    body {
+        animation: fadeIn 1s ease-in;
+        background-color: powderblue;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h4 {
+        font-weight: 600;
+    }
+
+    .container {
+        max-width: 900px;
+    }
+</style>
