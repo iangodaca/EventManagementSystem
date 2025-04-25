@@ -4,63 +4,72 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">@ViewData["Title"]</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <!-- Image Upload -->
+                        <div class="mb-3">
+                            <label for="ImageFile" class="form-label fw-semibold">Event Image</label>
+                            <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" />
+                        </div>
 
-    <form asp-action="Create" method="post" class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
-        <!-- Image Upload -->
-        <div class="col-md-6">
-            <label class="form-label">Event Image</label>
-            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
-        </div>
+                        <!-- Event Title -->
+                        <div class="mb-3">
+                            <label asp-for="EventTitle" class="form-label fw-semibold">Event Title</label>
+                            <input asp-for="EventTitle" class="form-control" placeholder="Enter event title" required />
+                            <span asp-validation-for="EventTitle" class="text-danger"></span>
+                        </div>
 
-        <!-- Event Title -->
-        <div class="col-md-6">
-            <label asp-for="EventTitle" class="form-label">Event Name</label>
-            <input asp-for="EventTitle" class="form-control" required />
-            <span asp-validation-for="EventTitle" class="text-danger"></span>
-        </div>
+                        <!-- Event Description -->
+                        <div class="mb-3">
+                            <label asp-for="EventDescription" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="EventDescription" class="form-control" rows="3" placeholder="Describe the event"></textarea>
+                            <span asp-validation-for="EventDescription" class="text-danger"></span>
+                        </div>
 
-        <!-- Event Description -->
-        <div class="col-md-6">
-            <label asp-for="EventDescription" class="form-label">Event Description</label>
-            <input asp-for="EventDescription" class="form-control" />
-            <span asp-validation-for="EventDescription" class="text-danger"></span>
-        </div>
+                        <!-- Event Location -->
+                        <div class="mb-3">
+                            <label asp-for="EventLocation" class="form-label fw-semibold">Location</label>
+                            <input asp-for="EventLocation" class="form-control" placeholder="Event location" />
+                            <span asp-validation-for="EventLocation" class="text-danger"></span>
+                        </div>
 
-        <!-- Event Location -->
-        <div class="col-md-6">
-            <label asp-for="EventLocation" class="form-label">Event Location</label>
-            <input asp-for="EventLocation" class="form-control" />
-            <span asp-validation-for="EventLocation" class="text-danger"></span>
-        </div>
+                        <!-- Event Date -->
+                        <div class="mb-3">
+                            <label asp-for="EventDate" class="form-label fw-semibold">Date & Time</label>
+                            <input asp-for="EventDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="EventDate" class="text-danger"></span>
+                        </div>
 
-        <!-- Event Date -->
-        <div class="col-md-6">
-            <label asp-for="EventDate" class="form-label">Event Date</label>
-            <input asp-for="EventDate" type="datetime-local" class="form-control" />
-            <span asp-validation-for="EventDate" class="text-danger"></span>
-        </div>
+                        <!-- Event Category -->
+                        <div class="mb-3">
+                            <label asp-for="EventCategory" class="form-label fw-semibold">Category</label>
+                            <input asp-for="EventCategory" class="form-control" placeholder="e.g. Conference, Workshop" />
+                            <span asp-validation-for="EventCategory" class="text-danger"></span>
+                        </div>
 
-        <!-- Event Category -->
-        <div class="col-md-6">
-            <label asp-for="EventCategory" class="form-label">Event Category</label>
-            <input asp-for="EventCategory" class="form-control" />
-            <span asp-validation-for="EventCategory" class="text-danger"></span>
-        </div>
+                        <!-- Attendee Count -->
+                        <div class="mb-3">
+                            <label asp-for="AttendeeCount" class="form-label fw-semibold">Expected Attendees</label>
+                            <input asp-for="AttendeeCount" type="number" class="form-control" min="0" />
+                            <span asp-validation-for="AttendeeCount" class="text-danger"></span>
+                        </div>
 
-        <!-- Attendee Count -->
-        <div class="col-md-6">
-            <label asp-for="AttendeeCount" class="form-label">Attendee Count</label>
-            <input asp-for="AttendeeCount" type="number" class="form-control" />
-            <span asp-validation-for="AttendeeCount" class="text-danger"></span>
+                        <!-- Submit and Cancel buttons -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Create Event</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <!-- Submit and Cancel buttons -->
-        <div class="col-12 mt-3">
-            <button type="submit" class="btn btn-primary">Create Event</button>
-            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
-        </div>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
