@@ -2,56 +2,113 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4 fw-bold text-primary">Welcome to <span class="text-dark">Eventive</span></h1>
-    <p class="lead text-dark">
+<div class="text-center mt-5 animate__animated animate__fadeInDown">
+    <h1 class="display-4 fw-bold text-primary">Welcome to <span class="text-dark gradient-text">Eventive</span></h1>
+    <p class="lead text-dark animate__animated animate__fadeIn animate__delay-1s">
         Your all-in-one platform for discovering and managing events effortlessly.
     </p>
-    <a href="/Events" class="btn btn-lg btn-outline-primary mt-3">
+    <a href="/Events" class="btn btn-lg btn-primary mt-3 rounded-pill shadow-sm animate__animated animate__fadeInUp animate__delay-1s hover-scale">
         Explore Events <i class="bi bi-calendar-event ms-2"></i>
     </a>
 </div>
 
 <div class="container mt-5">
     <div class="row align-items-center">
-        <div class="col-md-6 d-flex justify-content-center">
-            <img src="/image/manage.jpg" alt="Event Banner"
-                 class="img-fluid shadow"
-                 style="height: 350px; width: 350px; border-radius: 50%; object-fit:fill;" />
+        <div class="col-md-6 d-flex justify-content-center animate__animated animate__fadeInLeft">
+            <div class="image-container">
+                <img src="/image/manage.jpg" alt="Event Banner"
+                     class="img-fluid shadow hover-rotate"
+                     style="height: 350px; width: 350px; border-radius: 50%; object-fit:cover;" />
+            </div>
         </div>
 
-        <div class="col-md-6">
-            <h2 class="text-primary">Why Choose Eventive?</h2>
-            <p class="text-dark">
+        <div class="col-md-6 animate__animated animate__fadeInRight">
+            <h2 class="text-primary mb-4 feature-heading">Why Choose Eventive?</h2>
+            <p class="text-dark mb-4">
                 Eventive is designed to simplify your event experience. From registration to reminders,
                 we've got every detail covered — whether you're an organizer or an attendee.
             </p>
-            <ul class="list-unstyled text-dark">
-                <li><i class="bi bi-check2-circle text-success me-2"></i> Effortless Event Creation</li>
-                <li><i class="bi bi-check2-circle text-success me-2"></i> Easy Ticketing & Registration</li>
-                <li><i class="bi bi-check2-circle text-success me-2"></i> Real-Time Notifications</li>
-                <li><i class="bi bi-check2-circle text-success me-2"></i> Clean, Responsive Interface</li>
+            <ul class="list-unstyled text-dark feature-list">
+                <li class="mb-3 feature-item"><i class="bi bi-check2-circle text-success me-2"></i> Effortless Event Creation</li>
+                <li class="mb-3 feature-item"><i class="bi bi-check2-circle text-success me-2"></i> Easy Ticketing & Registration</li>
+                <li class="mb-3 feature-item"><i class="bi bi-check2-circle text-success me-2"></i> Real-Time Notifications</li>
+                <li class="mb-3 feature-item"><i class="bi bi-check2-circle text-success me-2"></i> Clean, Responsive Interface</li>
             </ul>
         </div>
     </div>
 </div>
 
 <style>
-    body {
-        animation: fadeIn 1s ease-in;
-        background-color: powderblue;
-        font-family: 'Sora', sans-serif;
+    
+    .gradient-text {
+        background: linear-gradient(45deg, #1a237e, #0d47a1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     
-    h1, h2 {
-        font-family: 'Sora', sans-serif;
+    .hover-scale {
+        transition: transform 0.3s ease;
     }
     
-    p, ul, li {
-        font-family: 'Sora', sans-serif;
+    .hover-scale:hover {
+        transform: scale(1.05);
     }
     
-    .btn {
-        font-family: 'Sora', sans-serif;
+    .hover-rotate {
+        transition: transform 0.5s ease;
+    }
+    
+    .hover-rotate:hover {
+        transform: rotate(5deg);
+    }
+    
+    .feature-heading {
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .feature-heading:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #1a237e, #0d47a1);
+        border-radius: 3px;
+    }
+    
+    .feature-item {
+        padding: 10px 15px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        cursor: default;
+    }
+    
+    .feature-item:hover {
+        background: rgba(255, 255, 255, 0.6);
+        transform: translateX(10px);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 50%;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Add animate.css classes */
+    .animate__animated {
+        animation-duration: 1s;
+    }
+    
+    .animate__delay-1s {
+        animation-delay: 1s;
     }
 </style>

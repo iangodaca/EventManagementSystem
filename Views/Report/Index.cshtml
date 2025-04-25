@@ -2,115 +2,251 @@
 @model List<EventManagementSystem.Models.Entities.Report>
 
 @{
-    ViewData["Title"] = "Monthly Event Report";
+    ViewData["Title"] = "Analytics Dashboard";
+    var categories = new[]
+    {
+        "Conference",
+        "Seminar",
+        "Workshop",
+        "Webinar",
+        "Networking Event",
+        "Trade Show",
+        "Product Launch",
+        "Award Ceremony",
+        "Fundraiser",
+        "Festival",
+        "Concert",
+        "Exhibition",
+        "Training Session",
+        "Team Building",
+        "Panel Discussion",
+        "Hackathon",
+        "Charity Event",
+        "Community Outreach",
+        "Annual Meeting",
+        "Orientation",
+        "Other"
+    };
 }
 
-<div class="container bg-white p-4 rounded shadow">
-    <h1 class="fs-4 fw-bold mb-4">Monthly Event Report</h1>
-
-    <!-- Filters -->
-    <form method="get" class="d-flex mb-4 justify-content-end">
-        <div class="input-group me-2" style="width: 300px;">
-            <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search..." />
-            <button type="submit" class="btn btn-outline-secondary">
-                <i class="bi bi-search"></i>
-            </button>
+<div class="container mt-4">
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fs-3 fw-bold mb-1">
+                <i class="bi bi-graph-up-arrow text-primary me-2"></i>
+                Analytics Dashboard
+            </h1>
+            <p class="text-muted mb-0">View and analyze event statistics and trends</p>
         </div>
+        
+        <!-- Filters -->
+        <form method="get" class="d-flex">
+            <div class="input-group me-2" style="width: 250px;">
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search events..." />
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
 
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-funnel"></i> Filters
-            </button>
-            <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="filterDropdown" style="width: 300px;">
-                <div class="mb-3">
-                    <label class="form-label">Category</label>
-                    <input type="text" name="category" value="@ViewBag.Category" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">From Date</label>
-                    <input type="date" name="fromDate" value="@ViewBag.FromDate" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">To Date</label>
-                    <input type="date" name="toDate" value="@ViewBag.ToDate" class="form-control" />
-                </div>
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel-fill me-1"></i> Filters
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="filterDropdown" style="width: 300px;">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-tags me-1"></i> Category
+                        </label>
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            @foreach (var category in categories)
+                            {
+                                if (category == ViewBag.Category)
+                                {
+                                    <option value="@category" selected>@category</option>
+                                }
+                                else
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-calendar-event me-1"></i> From Date
+                        </label>
+                        <input type="date" name="fromDate" value="@ViewBag.FromDate" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="bi bi-calendar-check me-1"></i> To Date
+                        </label>
+                        <input type="date" name="toDate" value="@ViewBag.ToDate" class="form-control" />
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check2-all me-1"></i> Apply Filters
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
     <!-- Dashboard Stats -->
-    <div class="row g-3">
+    <div class="row g-4 mb-4">
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h5>Total Events</h5>
-                <p class="fs-4 fw-bold">@Model.Sum(r => r.Events.Count)</p>
+            <div class="card border-0 shadow-sm rounded-4 h-100 stat-card stat-card-primary">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-muted">Total Events</h6>
+                        <div class="stat-icon bg-primary-light text-primary rounded-circle">
+                            <i class="bi bi-calendar2-event"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0">@Model.Sum(r => r.Events.Count)</h2>
+                    <p class="card-text text-muted mt-2 mb-0 small">
+                        <i class="bi bi-arrow-up-right me-1 text-success"></i>
+                        Events across all categories
+                    </p>
+                </div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h5>Completed Events</h5>
-                <p class="fs-4 fw-bold">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Completed")</p>
+            <div class="card border-0 shadow-sm rounded-4 h-100 stat-card stat-card-success">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-muted">Completed Events</h6>
+                        <div class="stat-icon bg-success-light text-success rounded-circle">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Completed")</h2>
+                    <p class="card-text text-muted mt-2 mb-0 small">
+                        <i class="bi bi-flag-fill me-1 text-success"></i>
+                        Successfully executed events
+                    </p>
+                </div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h5>Upcoming Events</h5>
-                <p class="fs-4 fw-bold">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Upcoming")</p>
+            <div class="card border-0 shadow-sm rounded-4 h-100 stat-card stat-card-warning">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-muted">Upcoming Events</h6>
+                        <div class="stat-icon bg-warning-light text-warning rounded-circle">
+                            <i class="bi bi-calendar-date"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0">@Model.SelectMany(r => r.Events).Count(e => e.Status == "Upcoming")</h2>
+                    <p class="card-text text-muted mt-2 mb-0 small">
+                        <i class="bi bi-clock-history me-1 text-warning"></i>
+                        Events scheduled in the future
+                    </p>
+                </div>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h5>Total Users</h5>
-                <p class="fs-4 fw-bold">@ViewBag.TotalUsers</p>
+            <div class="card border-0 shadow-sm rounded-4 h-100 stat-card stat-card-info">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0 fw-bold text-muted">Total Users</h6>
+                        <div class="stat-icon bg-info-light text-info rounded-circle">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0">@ViewBag.TotalUsers</h2>
+                    <p class="card-text text-muted mt-2 mb-0 small">
+                        <i class="bi bi-person-check-fill me-1 text-info"></i>
+                        Registered platform users
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Charts -->
-    <div class="row mt-4 g-3 h">
+    <div class="row g-4 mb-4">
         <div class="col-12 col-md-6">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h6 class="mb-3">Event Categories</h6>
-                <canvas id="categoryPieChart"></canvas>
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="bi bi-pie-chart-fill text-primary me-2"></i>
+                            Event Categories
+                        </h5>
+                        <span class="badge rounded-pill bg-light text-dark">
+                            <i class="bi bi-tag-fill me-1"></i> @(ViewBag.CategoryLabels != null ? ViewBag.CategoryLabels.Length : 0) categories
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryPieChart" height="250"></canvas>
+                </div>
             </div>
         </div>
         <div class="col-12 col-md-6">
-            <div class="bg-white p-4 rounded shadow text-center h-100">
-                <h6 class="mb-3">Events by Month</h6>
-                <canvas id="eventsBarChart"></canvas>
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="bi bi-bar-chart-fill text-success me-2"></i>
+                            Events by Month
+                        </h5>
+                        <span class="badge rounded-pill bg-light text-dark">
+                            <i class="bi bi-calendar3 me-1"></i> Monthly trends
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="eventsBarChart" height="250"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Monthly Event List -->
-    <div class="mt-4">
+    <div class="mb-4">
         @foreach (var month in Model)
         {
-            <div class="bg-white p-4 rounded shadow mb-4">
-                <h5 class="text-start mb-3">@($"{month.Year}-{month.Month:D2}")</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Event Title</th>
-                                <th>Date</th>
-                                <th>Attendee Count</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var ev in month.Events)
-                            {
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-4 pb-2 px-4">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-calendar-month text-primary me-2"></i>
+                        @($"{new DateTime(month.Year, month.Month, 1):MMMM yyyy}")
+                    </h5>
+                    <span class="badge rounded-pill bg-primary">
+                        <i class="bi bi-calendar-event me-1"></i> @month.Events.Count events
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
                                 <tr>
-                                    <td>@ev.Title</td>
-                                    <td>@ev.Date.ToString("yyyy-MM-dd")</td>
-                                    <td>@ev.AttendeeCount</td>
+                                    <th><i class="bi bi-card-heading me-1"></i> Event Title</th>
+                                    <th><i class="bi bi-calendar2 me-1"></i> Date</th>
+                                    <th><i class="bi bi-people me-1"></i> Attendees</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var ev in month.Events)
+                                {
+                                    <tr>
+                                        <td class="fw-medium">@ev.Title</td>
+                                        <td>@ev.Date.ToString("MMM dd, yyyy")</td>
+                                        <td>
+                                            <span class="badge bg-secondary rounded-pill">
+                                                <i class="bi bi-person me-1"></i> @ev.AttendeeCount
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         }
@@ -119,35 +255,197 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Create pie chart with animation and improved styling
     new Chart(document.getElementById('categoryPieChart'), {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: @Html.Raw(Json.Serialize(ViewBag.CategoryLabels)),
             datasets: [{
                 data: @Html.Raw(Json.Serialize(ViewBag.CategoryData)),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'],
-                hoverOffset: 4
+                backgroundColor: [
+                    '#4361ee', '#3a0ca3', '#7209b7', '#f72585', '#4cc9f0',
+                    '#4895ef', '#560bad', '#f15bb5', '#fee440', '#00bbf9',
+                    '#00f5d4', '#e63946', '#a8dadc', '#457b9d', '#1d3557'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 6
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 15,
+                        font: {
+                            size: 11
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    padding: 10,
+                    cornerRadius: 6,
+                    boxPadding: 6
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            cutout: '60%'
         }
     });
 
+    // Create bar chart with animation and improved styling
     new Chart(document.getElementById('eventsBarChart'), {
         type: 'bar',
         data: {
             labels: @Html.Raw(Json.Serialize(ViewBag.Months)),
             datasets: [{
-                label: 'Total Events',
+                label: 'Events',
                 data: @Html.Raw(Json.Serialize(ViewBag.TotalEventsByMonth)),
-                backgroundColor: '#4CAF50',
-                borderColor: '#388E3C',
-                borderWidth: 1
+                backgroundColor: '#4CC9F0',
+                borderColor: '#3A86FF',
+                borderWidth: 1,
+                borderRadius: 6,
+                barThickness: 'flex',
+                maxBarThickness: 35
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    padding: 10,
+                    cornerRadius: 6,
+                    boxPadding: 6,
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw + ' events';
+                        }
+                    }
+                }
+            },
             scales: {
-                x: { beginAtZero: true }
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        borderDash: [3, 3]
+                    },
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            animation: {
+                duration: 1500,
+                easing: 'easeOutQuart'
             }
         }
     });
 </script>
+
+<style>
+    /* Dashboard Stats Card Styling */
+    .stat-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        font-size: 1.4rem;
+    }
+    
+    .bg-primary-light {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    .bg-success-light {
+        background-color: rgba(25, 135, 84, 0.1);
+    }
+    
+    .bg-warning-light {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+    
+    .bg-info-light {
+        background-color: rgba(13, 202, 240, 0.1);
+    }
+    
+    .stat-card-primary {
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .stat-card-success {
+        border-left: 4px solid #198754;
+    }
+    
+    .stat-card-warning {
+        border-left: 4px solid #ffc107;
+    }
+    
+    .stat-card-info {
+        border-left: 4px solid #0dcaf0;
+    }
+    
+    /* Table styling */
+    .table {
+        vertical-align: middle;
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    /* Animation for stat numbers */
+    @@keyframes countUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .display-6 {
+        animation: countUp 1s ease forwards;
+    }
+    
+    .rounded-4 {
+        border-radius: 0.75rem !important;
+    }
+</style>

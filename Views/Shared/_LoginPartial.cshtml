@@ -14,9 +14,11 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li>
-                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
-                        <i class="bi bi-person me-2"></i>Profile Details
-                    </a>
+                    <div class="dropdown-item mb-2">
+                        <img src="/images/default-avatar.png" alt="Profile" class="rounded-circle me-2" width="50" height="50"/>
+                        @UserManager.GetUserAsync(User).Result.Email
+                    </div>
+                    <hr class="dropdown-divider">
                 </li>
                 <li>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
@@ -25,7 +27,7 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmLogout()">
+                    <a class="dropdown-item text-danger" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         <i class="bi bi-box-arrow-right me-2"></i>Logout
                     </a>
                     <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" style="display:none;">
@@ -45,6 +47,28 @@
     }
 </ul>
 
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0 bg-primary text-white rounded-top-4">
+                <h5 class="modal-title fw-bold" id="logoutModalLabel">Confirm Logout</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-question-circle text-primary me-3" style="font-size: 2rem;"></i>
+                    <p class="mb-0">Are you sure you want to log out of your account?</p>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 pb-3 px-4">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('logoutForm').submit();">Yes, Log Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .logout-icon i {
         color: white;
@@ -61,18 +85,54 @@
     
     .dropdown-item:hover {
         background-color: #f8f9fa;
-        transform: translateX(5px);
+        transform: scale(1.05);
     }
     
     .dropdown-item.text-danger:hover {
         background-color: rgba(220, 53, 69, 0.1);
     }
-</style>
 
-<script>
-    function confirmLogout() {
-        if (confirm("Are you sure you want to logout?")) {
-            document.getElementById('logoutForm').submit();
-        }
+    /* Modal animations */
+    .modal.fade .modal-dialog {
+        transition: transform 0.3s ease-out;
     }
-</script>
+    
+    .modal.show .modal-dialog {
+        transform: none;
+    }
+    
+    .modal-content {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+    
+    .modal-header, .modal-footer {
+        border: none;
+    }
+    
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+    }
+</style>

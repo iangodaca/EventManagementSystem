@@ -1,124 +1,836 @@
 ﻿@model IEnumerable<EventManagementSystem.Models.Entities.Event>
 
 @{
-    ViewData["Title"] = "Events List";
+    ViewData["Title"] = "Events";
+    var categories = new[]
+    {
+        "Conference",
+        "Seminar",
+        "Workshop",
+        "Webinar",
+        "Networking Event",
+        "Trade Show",
+        "Product Launch",
+        "Award Ceremony",
+        "Fundraiser",
+        "Festival",
+        "Concert",
+        "Exhibition",
+        "Training Session",
+        "Team Building",
+        "Panel Discussion",
+        "Hackathon",
+        "Charity Event",
+        "Community Outreach",
+        "Annual Meeting",
+        "Orientation",
+        "Other"
+    };
+    var viewMode = Context.Request.Cookies["EventViewMode"] ?? "card";
+    
+    // Sort events by date (upcoming first, then past events)
+    var upcomingEvents = Model.Where(e => e.EventDate >= DateTime.Now).OrderBy(e => e.EventDate);
+    var pastEvents = Model.Where(e => e.EventDate < DateTime.Now).OrderByDescending(e => e.EventDate);
+    var sortedEvents = upcomingEvents.Concat(pastEvents).ToList();
 }
 
-<div class="container mt-5">
-    <div class="bg-white p-4 rounded shadow">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Events</h2>
-            <a class="btn btn-primary" href="/Events/Create">
-                <i class="bi bi-plus-circle me-1"></i> Add New Event
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fs-3 fw-bold mb-1">
+                <i class="bi bi-calendar-event text-primary me-2"></i>
+                Events Management
+            </h1>
+            <p class="text-muted mb-0">Manage and organize your upcoming events</p>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="btn-group" role="group" aria-label="View mode">
+                <button type="button" class="btn btn-outline-primary @(viewMode == "card" ? "active" : "")" id="cardViewBtn">
+                    <i class="bi bi-grid-3x3-gap-fill me-1"></i> Card
+                </button>
+                <button type="button" class="btn btn-outline-primary @(viewMode == "list" ? "active" : "")" id="listViewBtn">
+                    <i class="bi bi-list-ul me-1"></i> List
+                </button>
+            </div>
+            <a class="btn btn-primary rounded-pill shadow-sm" href="/Events/Create">
+                <i class="bi bi-plus-circle me-2"></i> Add New Event
             </a>
         </div>
+    </div>
 
-        <!-- Filters -->
-        <form method="get" class="d-flex mb-4 justify-content-end">
-            <div class="input-group me-2" style="width: 300px;">
-                <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search..." />
-                <button type="submit" class="btn btn-outline-secondary">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-funnel"></i> Filters
-                </button>
-                <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="filterDropdown" style="width: 300px;">
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <input type="text" name="category" value="@ViewBag.Category" class="form-control" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">From Date</label>
-                        <input type="date" name="fromDate" value="@ViewBag.FromDate" class="form-control" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">To Date</label>
-                        <input type="date" name="toDate" value="@ViewBag.ToDate" class="form-control" />
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    <!-- Filters -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form method="get" class="d-flex flex-column flex-md-row gap-3 align-items-md-end">
+                <div class="flex-grow-1">
+                    <label class="form-label">
+                        <i class="bi bi-search me-1"></i> Search Events
+                    </label>
+                    <div class="input-group">
+                        <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Enter event name, category, or location..." />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
-        </form>
 
-        <!-- Events Card Stack -->
-        <div class="d-flex flex-column gap-3">
-            @foreach (var evt in Model)
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-funnel-fill me-1"></i> Filters
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="filterDropdown" style="width: 300px;">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-tags me-1"></i> Category
+                            </label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                @foreach (var category in categories)
+                                {
+                                    if (category == ViewBag.Category)
+                                    {
+                                        <option value="@category" selected>@category</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@category">@category</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-calendar-event me-1"></i> From Date
+                            </label>
+                            <input type="date" name="fromDate" value="@ViewBag.FromDate" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-calendar-check me-1"></i> To Date
+                            </label>
+                            <input type="date" name="toDate" value="@ViewBag.ToDate" class="form-control" />
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check2-all me-1"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    @if (!Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+            <div class="py-5">
+                <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+                <h3 class="mt-4 mb-2">No Events Found</h3>
+                <p class="text-muted mb-4">There are no events matching your search criteria.</p>
+                <a href="/Events" class="btn btn-outline-primary rounded-pill">
+                    <i class="bi bi-arrow-clockwise me-2"></i> Reset Filters
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Sort Controls -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+                <span class="text-muted me-2">Sort by:</span>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active" id="sortUpcomingBtn">
+                        <i class="bi bi-arrow-up me-1"></i> Upcoming First
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="sortNewestBtn">
+                        <i class="bi bi-calendar-plus me-1"></i> Newest
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="sortOldestBtn">
+                        <i class="bi bi-calendar-minus me-1"></i> Oldest
+                    </button>
+                </div>
+            </div>
+            <div class="small text-muted">
+                <i class="bi bi-info-circle me-1"></i> Showing @Model.Count() events
+            </div>
+        </div>
+
+        <!-- Card View Events -->
+        <div id="cardView" class="d-flex flex-column gap-4 @(viewMode != "card" ? "d-none" : "")">
+            @foreach (var evt in sortedEvents)
             {
-                <div class="card border-0 shadow-lg rounded-4 p-3 bg-white event-card slide-in">
-                    <div class="row g-3">
+                <div class="card border-0 shadow-sm rounded-4 event-card" data-event-date="@evt.EventDate.ToString("yyyy-MM-ddTHH:mm:ss")">
+                    <div class="row g-0">
                         <!-- Image -->
-                        <div class="col-md-4">
-                            <img src="@evt.ImagePath" alt="Event Image" class="img-fluid rounded-3 h-100 w-100 object-fit-cover" style="max-height: 200px;" />
+                        <div class="col-md-4 position-relative overflow-hidden">
+                            <div class="event-image-container">
+                                <img src="@evt.ImagePath" alt="Event Image" class="img-fluid rounded-start-4 h-100 w-100 object-fit-cover" />
+                                <div class="image-overlay"></div>
+                            </div>
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-primary rounded-pill shadow-sm">
+                                    <i class="bi bi-tag-fill me-1"></i> @evt.EventCategory
+                                </span>
+                            </div>
+                            @if (evt.EventDate < DateTime.Now)
+                            {
+                                <div class="position-absolute bottom-0 start-0 m-3">
+                                    <span class="badge bg-success rounded-pill shadow-sm">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Completed
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="position-absolute bottom-0 start-0 m-3">
+                                    <span class="badge bg-warning text-dark rounded-pill shadow-sm">
+                                        <i class="bi bi-clock-fill me-1"></i> Upcoming
+                                    </span>
+                                </div>
+                            }
                         </div>
 
                         <!-- Info -->
-                        <div class="col-md-8 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <h5 class="text-primary fw-bold mb-0">@evt.EventTitle</h5>
-                                    <span class="text-muted small">
-                                        <i class="bi bi-calendar3 me-1"></i>@evt.EventDate.ToString("yyyy-MM-dd hh:mm tt")
+                        <div class="col-md-8">
+                            <div class="card-body p-4 d-flex flex-column h-100">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="card-title fw-bold text-primary mb-0">@evt.EventTitle</h5>
+                                    <span class="text-muted small d-flex align-items-center">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        @evt.EventDate.ToString("MMM dd, yyyy - h:mm tt")
                                     </span>
                                 </div>
 
-                                <p class="text-muted mt-2 mb-2">
-                                    <i class="bi bi-tag me-1"></i><strong>Category:</strong> @evt.EventCategory<br />
-                                    <i class="bi bi-info-circle me-2"></i><strong>Description:</strong> @evt.EventDescription<br />
-                                    <i class="bi bi-geo-alt me-1"></i><strong>Location:</strong> @evt.EventLocation<br />
-                                    <i class="bi bi-people me-1"></i><strong>Attendees:</strong> @evt.AttendeeCount<br />
-                                </p>
-                            </div>
+                                <div class="mb-auto">
+                                    <p class="card-text mb-3 event-description">
+                                        @evt.EventDescription
+                                    </p>
+                                    
+                                    <div class="d-flex flex-wrap gap-3 text-muted small mb-2">
+                                        <div>
+                                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                            @evt.EventLocation
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-people-fill text-info me-1"></i>
+                                            <span class="fw-medium">@evt.AttendeeCount</span> attendees
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <!-- Action Buttons -->
-                            <div class="mt-3 d-flex justify-content-end gap-2">
-                                <a class="btn btn-sm btn-outline-warning" asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">
-                                    <i class="bi bi-pencil me-1"></i> Edit
-                                </a>
-                                <a class="btn btn-sm btn-outline-danger" asp-controller="Events" asp-action="Delete" asp-route-id="@evt.Id"
-                                   onclick="return confirm('Are you sure you want to delete this event?');">
-                                    <i class="bi bi-trash me-1"></i> Delete
-                                </a>
+                                <!-- Action Buttons -->
+                                <div class="mt-3 d-flex justify-content-end gap-2">
+                                    <button class="btn btn-sm btn-outline-info rounded-pill" 
+                                           onclick="showEventDetails('@evt.Id', '@evt.EventTitle', '@evt.EventCategory', '@evt.EventDescription.Replace("'", "\'")', '@evt.EventLocation', '@evt.EventDate.ToString("yyyy-MM-ddTHH:mm")', '@evt.ImagePath', '@evt.AttendeeCount')">
+                                        <i class="bi bi-eye-fill me-1"></i> View
+                                    </button>
+                                    <a class="btn btn-sm btn-outline-primary rounded-pill" asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">
+                                        <i class="bi bi-pencil-fill me-1"></i> Edit
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-danger rounded-pill" href="javascript:void(0)" 
+                                       onclick="showDeleteModal('@evt.Id', '@evt.EventTitle')">
+                                        <i class="bi bi-trash-fill me-1"></i> Delete
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             }
+        </div>
 
+        <!-- List View Events -->
+        <div id="listView" class="@(viewMode != "list" ? "d-none" : "")">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Event List</th>
+                                    <th>Category</th>
+                                    <th>Date & Time</th>
+                                    <th>Location</th>
+                                    <th class="text-center">Attendees</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventTableBody">
+                                @foreach (var evt in sortedEvents)
+                                {
+                                    <tr data-event-date="@evt.EventDate.ToString("yyyy-MM-ddTHH:mm:ss")">
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3" style="width: 50px; height: 50px; overflow: hidden; border-radius: 8px;">
+                                                    <img src="@evt.ImagePath" alt="Event" class="img-fluid w-100 h-100 object-fit-cover" />
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-semibold">@evt.EventTitle</h6>
+                                                    <p class="text-muted small mb-0 text-truncate" style="max-width: 200px;">
+                                                        @evt.EventDescription
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary rounded-pill">
+                                                @evt.EventCategory
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-calendar3 text-secondary me-2"></i>
+                                                <span>@evt.EventDate.ToString("MMM dd, yyyy")<br><small class="text-muted">@evt.EventDate.ToString("h:mm tt")</small></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                            @evt.EventLocation
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-secondary rounded-pill">
+                                                <i class="bi bi-people-fill me-1"></i> @evt.AttendeeCount
+                                            </span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <div class="d-flex justify-content-end gap-1">
+                                                <button class="btn btn-sm btn-outline-info rounded-circle" title="View Details"
+                                                       onclick="showEventDetails('@evt.Id', '@evt.EventTitle', '@evt.EventCategory', '@evt.EventDescription.Replace("'", "\'")', '@evt.EventLocation', '@evt.EventDate.ToString("yyyy-MM-ddTHH:mm")', '@evt.ImagePath', '@evt.AttendeeCount')">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                </button>
+                                                <a class="btn btn-sm btn-outline-primary rounded-circle" title="Edit Event" asp-controller="Events" asp-action="Edit" asp-route-id="@evt.Id">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
+                                                <button class="btn btn-sm btn-outline-danger rounded-circle" title="Delete Event"
+                                                       onclick="showDeleteModal('@evt.Id', '@evt.EventTitle')">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0 bg-danger text-white rounded-top-4">
+                <h5 class="modal-title fw-bold" id="deleteEventModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-3" style="font-size: 2rem;"></i>
+                    <div>
+                        <p class="mb-1">Are you sure you want to delete this event?</p>
+                        <p class="text-danger fw-bold mb-0" id="eventTitleToDelete"></p>
+                    </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted small">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 pb-3 px-4">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" class="btn btn-danger">Delete Event</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Event Details Modal -->
+<div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-bottom-0 bg-primary text-white rounded-top-4">
+                <h5 class="modal-title fw-bold" id="eventDetailsModalLabel">Event Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row g-0">
+                    <div class="col-md-5">
+                        <div class="position-relative h-100">
+                            <img id="eventImage" src="" alt="Event Image" class="img-fluid h-100 w-100 object-fit-cover" style="max-height: 400px;">
+                            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7))"></div>
+                            <div class="position-absolute bottom-0 start-0 p-4 text-white">
+                                <span id="eventCategory" class="badge bg-primary mb-2"></span>
+                                <div id="eventStatus" class="mb-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="p-4">
+                            <h3 id="eventTitle" class="fw-bold mb-3"></h3>
+                            
+                            <div class="d-flex gap-4 flex-wrap mb-4">
+                                <div>
+                                    <div class="text-muted small mb-1">Date & Time</div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-calendar-event text-primary me-2"></i>
+                                        <span id="eventDate"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small mb-1">Location</div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                        <span id="eventLocation"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted small mb-1">Attendees</div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-people-fill text-info me-2"></i>
+                                        <span id="eventAttendees"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-2">Description</h6>
+                                <p id="eventDescription" class="mb-0"></p>
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex gap-2 justify-content-start">
+                                    <a id="editEventLink" class="btn btn-outline-primary" href="">
+                                        <i class="bi bi-pencil-fill me-1"></i> Edit Event
+                                    </a>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i> Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-   
-
     .container {
-        max-width: 1500px;
-        width: 95%;
+        max-width: 1200px;
     }
-
+    
+    .event-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+        border-radius: 1rem !important;
+    }
+    
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    }
+    
     .event-description {
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
-
+    
     .object-fit-cover {
         object-fit: cover;
     }
-
-    .card {
-        transition: transform 0.2s ease;
+    
+    /* Event image styling */
+    .event-image-container {
+        height: 240px;
+        overflow: hidden;
+        position: relative;
     }
-
-        .card:hover {
-            transform: translateY(-2px);
+    
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.01), rgba(0,0,0,0.3));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .event-card:hover .image-overlay {
+        opacity: 1;
+    }
+    
+    /* Card image hover effect */
+    .event-card .event-image-container img {
+        transition: transform 0.5s ease;
+    }
+    
+    .event-card:hover .event-image-container img {
+        transform: scale(1.05);
+    }
+    
+    /* Button styling */
+    .btn-outline-primary, .btn-outline-danger, .btn-outline-info, .btn-outline-secondary {
+        border-width: 1.5px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-outline-primary:hover, .btn-outline-danger:hover, .btn-outline-info:hover, .btn-outline-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary {
+        box-shadow: 0 4px 6px rgba(13, 110, 253, 0.25);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(13, 110, 253, 0.3);
+    }
+    
+    /* Badge styling */
+    .badge {
+        padding: 0.5em 0.8em;
+        font-weight: 500;
+    }
+    
+    /* Modal animations */
+    .modal.fade .modal-dialog {
+        transition: transform 0.3s ease-out;
+    }
+    
+    .modal.show .modal-dialog {
+        transform: none;
+    }
+    
+    .modal-content {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+    
+    .modal-header, .modal-footer {
+        border: none;
+    }
+    
+    .btn-danger {
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+    
+    .rounded-pill {
+        border-radius: 50rem !important;
+    }
+    
+    .rounded-start-4 {
+        border-top-left-radius: 1rem !important;
+        border-bottom-left-radius: 1rem !important;
+    }
+    
+    /* Card hover effects */
+    .card {
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .card:hover {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* List view table styling */
+    .table {
+        margin-bottom: 0;
+    }
+    
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.04);
+    }
+    
+    .table th {
+        font-weight: 600;
+        padding: 1rem;
+    }
+    
+    .table td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+    }
+    
+    .rounded-circle {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Animation for loading cards */
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .event-card {
+        animation: slideIn 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        animation-delay: calc(var(--animation-order, 0) * 0.1s);
+    }
+    
+    /* Filter card styling */
+    .card-body {
+        border-radius: inherit;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-color: #e0e0e0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
 </style>
+
+<script>
+    function showDeleteModal(eventId, eventTitle) {
+        document.getElementById('eventTitleToDelete').textContent = eventTitle;
+        document.getElementById('confirmDeleteBtn').href = '/Events/Delete/' + eventId;
+        var deleteModal = new bootstrap.Modal(document.getElementById('deleteEventModal'));
+        deleteModal.show();
+    }
+    
+    function showEventDetails(id, title, category, description, location, dateTime, imagePath, attendees) {
+        // Set values in modal
+        document.getElementById('eventTitle').textContent = title;
+        document.getElementById('eventCategory').textContent = category;
+        document.getElementById('eventDescription').textContent = description;
+        document.getElementById('eventLocation').textContent = location;
+        
+        // Format date nicely
+        const eventDate = new Date(dateTime);
+        const formattedDate = eventDate.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('eventDate').textContent = formattedDate;
+        
+        document.getElementById('eventImage').src = imagePath;
+        document.getElementById('eventAttendees').textContent = attendees;
+        document.getElementById('editEventLink').href = '/Events/Edit/' + id;
+        
+        // Set status badge
+        const statusContainer = document.getElementById('eventStatus');
+        if (new Date(dateTime) < new Date()) {
+            statusContainer.innerHTML = '<span class="badge bg-success rounded-pill"><i class="bi bi-check-circle-fill me-1"></i> Completed</span>';
+        } else {
+            statusContainer.innerHTML = '<span class="badge bg-warning text-dark rounded-pill"><i class="bi bi-clock-fill me-1"></i> Upcoming</span>';
+        }
+        
+        // Show the modal
+        const eventModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'));
+        eventModal.show();
+    }
+    
+    // Sort events function
+    function sortEvents(sortType) {
+        const cardContainer = document.getElementById('cardView');
+        const tableContainer = document.getElementById('eventTableBody');
+        
+        // Get all events
+        const cardItems = Array.from(cardContainer.querySelectorAll('.event-card'));
+        const tableRows = Array.from(tableContainer.querySelectorAll('tr'));
+        
+        // Apply sorting based on type
+        if (sortType === 'upcoming') {
+            // Upcoming first (future events first by date, then past events by date descending)
+            const now = new Date();
+            
+            // Sort card view
+            cardItems.sort((a, b) => {
+                const dateA = new Date(a.dataset.eventDate);
+                const dateB = new Date(b.dataset.eventDate);
+                
+                const aFuture = dateA >= now;
+                const bFuture = dateB >= now;
+                
+                if (aFuture && !bFuture) return -1;
+                if (!aFuture && bFuture) return 1;
+                
+                // If both future or both past
+                if (aFuture) {
+                    return dateA - dateB; // Ascending for future
+                } else {
+                    return dateB - dateA; // Descending for past
+                }
+            });
+            
+            // Sort table view
+            tableRows.sort((a, b) => {
+                const dateA = new Date(a.dataset.eventDate);
+                const dateB = new Date(b.dataset.eventDate);
+                
+                const aFuture = dateA >= now;
+                const bFuture = dateB >= now;
+                
+                if (aFuture && !bFuture) return -1;
+                if (!aFuture && bFuture) return 1;
+                
+                // If both future or both past
+                if (aFuture) {
+                    return dateA - dateB; // Ascending for future
+                } else {
+                    return dateB - dateA; // Descending for past
+                }
+            });
+        } else if (sortType === 'newest') {
+            // Newest first (most recent date first)
+            cardItems.sort((a, b) => {
+                return new Date(b.dataset.eventDate) - new Date(a.dataset.eventDate);
+            });
+            
+            tableRows.sort((a, b) => {
+                return new Date(b.dataset.eventDate) - new Date(a.dataset.eventDate);
+            });
+        } else if (sortType === 'oldest') {
+            // Oldest first (oldest date first)
+            cardItems.sort((a, b) => {
+                return new Date(a.dataset.eventDate) - new Date(b.dataset.eventDate);
+            });
+            
+            tableRows.sort((a, b) => {
+                return new Date(a.dataset.eventDate) - new Date(b.dataset.eventDate);
+            });
+        }
+        
+        // Update DOM with sorted elements
+        cardItems.forEach(card => {
+            cardContainer.appendChild(card);
+        });
+        
+        tableRows.forEach(row => {
+            tableContainer.appendChild(row);
+        });
+        
+        // Update animation order
+        cardItems.forEach((card, index) => {
+            card.style.setProperty('--animation-order', index);
+        });
+    }
+    
+    // Add animation delay to each card
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.event-card');
+        cards.forEach((card, index) => {
+            card.style.setProperty('--animation-order', index);
+        });
+        
+        // View mode toggle
+        const cardViewBtn = document.getElementById('cardViewBtn');
+        const listViewBtn = document.getElementById('listViewBtn');
+        const cardView = document.getElementById('cardView');
+        const listView = document.getElementById('listView');
+        
+        cardViewBtn.addEventListener('click', function() {
+            cardView.classList.remove('d-none');
+            listView.classList.add('d-none');
+            cardViewBtn.classList.add('active');
+            listViewBtn.classList.remove('active');
+            // Save preference to cookie
+            document.cookie = "EventViewMode=card; path=/; max-age=" + 60*60*24*30; // 30 days
+        });
+        
+        listViewBtn.addEventListener('click', function() {
+            listView.classList.remove('d-none');
+            cardView.classList.add('d-none');
+            listViewBtn.classList.add('active');
+            cardViewBtn.classList.remove('active');
+            // Save preference to cookie
+            document.cookie = "EventViewMode=list; path=/; max-age=" + 60*60*24*30; // 30 days
+        });
+        
+        // Sort button handlers
+        const sortUpcomingBtn = document.getElementById('sortUpcomingBtn');
+        const sortNewestBtn = document.getElementById('sortNewestBtn');
+        const sortOldestBtn = document.getElementById('sortOldestBtn');
+        
+        sortUpcomingBtn.addEventListener('click', function() {
+            // Update active button
+            sortUpcomingBtn.classList.add('active');
+            sortNewestBtn.classList.remove('active');
+            sortOldestBtn.classList.remove('active');
+            
+            // Sort events
+            sortEvents('upcoming');
+        });
+        
+        sortNewestBtn.addEventListener('click', function() {
+            // Update active button
+            sortUpcomingBtn.classList.remove('active');
+            sortNewestBtn.classList.add('active');
+            sortOldestBtn.classList.remove('active');
+            
+            // Sort events
+            sortEvents('newest');
+        });
+        
+        sortOldestBtn.addEventListener('click', function() {
+            // Update active button
+            sortUpcomingBtn.classList.remove('active');
+            sortNewestBtn.classList.remove('active');
+            sortOldestBtn.classList.add('active');
+            
+            // Sort events
+            sortEvents('oldest');
+        });
+    });
+</script>

@@ -49,7 +49,30 @@
                         <!-- Event Category -->
                         <div class="mb-3">
                             <label asp-for="EventCategory" class="form-label fw-semibold">Category</label>
-                            <input asp-for="EventCategory" class="form-control" placeholder="e.g. Conference, Workshop" />
+                            <select asp-for="EventCategory" class="form-select">
+                                <option value="">Select a Category</option>
+                                <option value="Conference">Conference</option>
+                                <option value="Seminar">Seminar</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Webinar">Webinar</option>
+                                <option value="Networking Event">Networking Event</option>
+                                <option value="Trade Show">Trade Show</option>
+                                <option value="Product Launch">Product Launch</option>
+                                <option value="Award Ceremony">Award Ceremony</option>
+                                <option value="Fundraiser">Fundraiser</option>
+                                <option value="Festival">Festival</option>
+                                <option value="Concert">Concert</option>
+                                <option value="Exhibition">Exhibition</option>
+                                <option value="Training Session">Training Session</option>
+                                <option value="Team Building">Team Building</option>
+                                <option value="Panel Discussion">Panel Discussion</option>
+                                <option value="Hackathon">Hackathon</option>
+                                <option value="Charity Event">Charity Event</option>
+                                <option value="Community Outreach">Community Outreach</option>
+                                <option value="Annual Meeting">Annual Meeting</option>
+                                <option value="Orientation">Orientation</option>
+                                <option value="Other">Other</option>
+                            </select>
                             <span asp-validation-for="EventCategory" class="text-danger"></span>
                         </div>
 
@@ -63,7 +86,7 @@
                         <!-- Submit and Cancel buttons -->
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-primary px-4">Create Event</button>
-                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
                         </div>
                     </form>
                 </div>

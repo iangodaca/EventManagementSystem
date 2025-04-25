@@ -1,6 +1,8 @@
-﻿using EventManagementSystem.Data;
+﻿using EventManagementSystem.Areas.Identity.Data;
+using EventManagementSystem.Data;
 using EventManagementSystem.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +13,12 @@ using System.Threading.Tasks;
 public class ReportController : Controller
 {
     private readonly EventDbContext _context;
+    private readonly UserManager<AppUser> _userManager;
 
-    public ReportController(EventDbContext context)
+    public ReportController(EventDbContext context, UserManager<AppUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     [Authorize]
@@ -24,18 +28,25 @@ public class ReportController : Controller
         var report = await GetMonthlyEventReportAsync(search, category, fromDate, toDate);
         var eventCategories = await GetEventCategoriesAsync(search, category, fromDate, toDate); // Fetch event categories data
 
+        // Get total number of users
+        var totalUsers = await _userManager.Users.CountAsync();
+
         // Preparing the data for the charts
         ViewBag.Search = search;
         ViewBag.Category = category;
         ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
         ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");
+        ViewBag.TotalUsers = totalUsers;
 
         // Pie chart data for event categories
         ViewBag.CategoryData = eventCategories.Select(c => c.Count).ToArray();
         ViewBag.CategoryLabels = eventCategories.Select(c => c.Category).ToArray();
 
         // Bar chart data for total events by month
-        ViewBag.Months = report.Select(r => $"{r.Year}-{r.Month:D2}").ToArray();
+        ViewBag.Months = report
+    .Select(r => new DateTime(r.Year, r.Month, 1).ToString("MMMM yyyy"))
+    .ToArray();
+
         ViewBag.TotalEventsByMonth = report.Select(r => r.Events.Count).ToArray();
 
         return View(report);

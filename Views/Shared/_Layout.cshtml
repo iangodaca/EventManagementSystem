@@ -8,34 +8,33 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="~/EventManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="icon" href="favicon.ico"/>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
          body {
-        animation: fadeIn 1s ease-in;
         background-color: powderblue;
         font-family: 'Sora', sans-serif;
+    }
+    main {
+        animation: fadeIn 1s ease-in;
     }
     </style>
 </head>
 <body>
     <header class="animate__animated animate__fadeInDown">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom mb-3" style="background-color: darkblue;">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom mb-3" style="background-color: darkblue;">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="/image/logo].png" alt="Alternate Text" style="height: 60px; width: 60px; border-radius: 50%;" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-				<a href="c:\users\ian godaca\source\repos\eventmanagementsystem\views\shared\_layout.cshtml">
-				</button><link href="c:\users\ian godaca\source\repos\eventmanagementsystem\views\shared\_layout.cshtml.css" rel="stylesheet" />
-
                 </a>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item" data-bs-toggle="tooltip" title="Go to Home">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item" data-bs-toggle="tooltip" title="View Privacy Policy">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -46,12 +45,13 @@
                                 <a class="nav-link text-light" asp-area="" asp-controller="Report" asp-action="Index">Reports</a>
                             </li>
                         }
-                        <li class="nav-item" data-bs-toggle="tooltip" title="View Privacy Policy">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
         </nav>
     </header>
@@ -65,7 +65,7 @@
 
     <footer class="border-top footer text-muted animate__animated animate__fadeInUp">
         <div class="container text-center">
-            &copy; 2025 - EventManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - Eventive - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 

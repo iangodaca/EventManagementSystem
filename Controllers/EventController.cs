@@ -91,7 +91,6 @@
                 events = events.Where(e => e.EventDate <= toDate.Value);
             }
 
-            // Save the filters back to ViewBag so you can keep them in the form inputs
             ViewBag.Search = search;
             ViewBag.Category = category;
             ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
@@ -118,24 +117,19 @@
         {
             if (ModelState.IsValid)
             {
-                // If a new image file is uploaded
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    // Specify the directory where you want to store the images
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/events");
                     Directory.CreateDirectory(uploadsFolder); // Ensure the folder exists
 
-                    // Generate a unique filename for the uploaded image
                     var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    // Save the uploaded image to the file system
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await ImageFile.CopyToAsync(stream);
                     }
 
-                    // Remove the old image if needed (optional)
                     if (!string.IsNullOrEmpty(evt.ImagePath))
                     {
                         var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", evt.ImagePath.TrimStart('/'));
@@ -145,18 +139,15 @@
                         }
                     }
 
-                    // Set the ImagePath property to the new relative file path
                     evt.ImagePath = "/images/events/" + uniqueFileName;
                 }
                 else
                 {
-                    // If no new image is uploaded, retrieve the current image path from db
                     var currentImagePath = _context.Events
                         .Where(e => e.Id == evt.Id)
                         .Select(e => e.ImagePath)
                         .FirstOrDefault();
-                    
-                    // Preserve the existing image path
+                
                     evt.ImagePath = currentImagePath;
                 }
 
