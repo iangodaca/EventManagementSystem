@@ -118,6 +118,7 @@
         {
             if (ModelState.IsValid)
             {
+                // If a new image file is uploaded
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     // Specify the directory where you want to store the images
@@ -134,7 +135,7 @@
                         await ImageFile.CopyToAsync(stream);
                     }
 
-                    // Remove the old image if needed (optional)
+                    // Remove the old image if it exists
                     if (!string.IsNullOrEmpty(evt.ImagePath))
                     {
                         var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", evt.ImagePath.TrimStart('/'));
@@ -147,7 +148,13 @@
                     // Set the ImagePath property to the new relative file path
                     evt.ImagePath = "/images/events/" + uniqueFileName;
                 }
+                // If no new image is uploaded, keep the existing image path
+                else if (string.IsNullOrEmpty(evt.ImagePath) && !string.IsNullOrEmpty(evt.ImagePath))
+                {
+                    // Do nothing to the ImagePath (keep it as is)
+                }
 
+                // Update the event
                 _context.Events.Update(evt);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -155,6 +162,9 @@
 
             return View(evt);
         }
+
+
+
 
         [Authorize]
         // GET: /Events/Delete/5

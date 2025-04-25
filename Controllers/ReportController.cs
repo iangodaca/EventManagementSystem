@@ -35,7 +35,10 @@ public class ReportController : Controller
         ViewBag.CategoryLabels = eventCategories.Select(c => c.Category).ToArray();
 
         // Bar chart data for total events by month
-        ViewBag.Months = report.Select(r => $"{r.Year}-{r.Month:D2}").ToArray();
+        ViewBag.Months = report
+    .Select(r => new DateTime(r.Year, r.Month, 1).ToString("MMMM yyyy"))
+    .ToArray();
+
         ViewBag.TotalEventsByMonth = report.Select(r => r.Events.Count).ToArray();
 
         return View(report);
