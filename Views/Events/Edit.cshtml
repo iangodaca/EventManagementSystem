@@ -6,69 +6,60 @@
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg rounded-4 border-0">
-                <div class="card-header bg-primary text-white rounded-top-4">
-                    <h4 class="mb-0">Edit Event</h4>
+        <div class="col-lg-8 col-md-10">
+            <div class="card border-0 shadow p-4 rounded-4 animate__animated animate__fadeIn">
+                <div class="card-header bg-gradient-primary text-white rounded-top-4 shadow-sm">
+                    <h4 class="mb-0 fw-bold text-center">Edit Event</h4>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body bg-white p-4 rounded-bottom-4">
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Event Image (Optional)</label>
-                            <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                            <input type="file" name="ImageFile" class="form-control form-control-sm" accept="image/*" />
                         </div>
-                        <!-- Event Title -->
+
                         <div class="mb-3">
                             <label asp-for="EventTitle" class="form-label fw-semibold"></label>
                             <input asp-for="EventTitle" class="form-control" placeholder="Enter event title" />
                             <span asp-validation-for="EventTitle" class="text-danger"></span>
                         </div>
 
-                        <!-- Event Description -->
                         <div class="mb-3">
                             <label asp-for="EventDescription" class="form-label fw-semibold"></label>
                             <textarea asp-for="EventDescription" class="form-control" rows="3" placeholder="Describe the event"></textarea>
                             <span asp-validation-for="EventDescription" class="text-danger"></span>
                         </div>
 
-                        <!-- Event Location -->
                         <div class="mb-3">
                             <label asp-for="EventLocation" class="form-label fw-semibold"></label>
                             <input asp-for="EventLocation" class="form-control" placeholder="Event location" />
                             <span asp-validation-for="EventLocation" class="text-danger"></span>
                         </div>
 
-                        <!-- Event Date -->
                         <div class="mb-3">
                             <label asp-for="EventDate" class="form-label fw-semibold"></label>
                             <input asp-for="EventDate" type="datetime-local" class="form-control" />
                             <span asp-validation-for="EventDate" class="text-danger"></span>
                         </div>
 
-                        <!-- Event Category -->
                         <div class="mb-3">
                             <label asp-for="EventCategory" class="form-label fw-semibold"></label>
                             <input asp-for="EventCategory" class="form-control" placeholder="e.g. Conference, Workshop" />
                             <span asp-validation-for="EventCategory" class="text-danger"></span>
                         </div>
 
-                        <!-- Attendee Count -->
-                        <div class="mb-3">
+                        <div class="mb-4">
                             <label asp-for="AttendeeCount" class="form-label fw-semibold"></label>
                             <input asp-for="AttendeeCount" type="number" class="form-control" min="0" />
                             <span asp-validation-for="AttendeeCount" class="text-danger"></span>
                         </div>
 
-                        <!-- Image Upload (optional) -->
-
-                        <!-- Submit Button -->
-                        <div class="d-flex gap-2">
-
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm rounded-pill">
+                                <i class="bi bi-save me-2"></i>Save Changes
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -76,3 +67,25 @@
         </div>
     </div>
 </div>
+
+<!-- Styles -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+<style>
+    body {
+        background-color: powderblue;
+    }
+
+    .card {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+        }
+
+    .bg-gradient-primary {
+        background: linear-gradient(to right, #007bff, #0056b3);
+    }
+</style>
