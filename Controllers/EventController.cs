@@ -118,6 +118,7 @@
         {
             if (ModelState.IsValid)
             {
+                // If a new image file is uploaded
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     // Specify the directory where you want to store the images
@@ -146,6 +147,17 @@
 
                     // Set the ImagePath property to the new relative file path
                     evt.ImagePath = "/images/events/" + uniqueFileName;
+                }
+                else
+                {
+                    // If no new image is uploaded, retrieve the current image path from db
+                    var currentImagePath = _context.Events
+                        .Where(e => e.Id == evt.Id)
+                        .Select(e => e.ImagePath)
+                        .FirstOrDefault();
+                    
+                    // Preserve the existing image path
+                    evt.ImagePath = currentImagePath;
                 }
 
                 _context.Events.Update(evt);

@@ -1,0 +1,51 @@
+@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+
+<div class="account-management-wrapper">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-3">
+                <partial name="_ManageNav" />
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .account-management-wrapper {
+        font-family: 'Sora', sans-serif;
+        min-height: 80vh;
+    }
+    
+    /* Adding a gentle gradient background that complements the powderblue */
+    body {
+        background: linear-gradient(165deg, #e0f7fa 0%, #b3e5fc 100%);
+    }
+    
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .account-management-wrapper .row {
+            flex-direction: column;
+        }
+        
+        .account-management-wrapper .col-md-3,
+        .account-management-wrapper .col-md-9 {
+            width: 100%;
+        }
+    }
+</style>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+} 

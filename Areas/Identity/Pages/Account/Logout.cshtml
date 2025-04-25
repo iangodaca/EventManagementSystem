@@ -4,18 +4,75 @@
     ViewData["Title"] = "Log out";
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-        if (User.Identity?.IsAuthenticated ?? false)
-        {
+<div class="user-profile-container">
+    <div class="content-card">
+        <div class="card-header">
+            <h2 class="card-title">@ViewData["Title"]</h2>
+            <p class="card-subtitle">Are you sure you want to log out of your account?</p>
+        </div>
+        
+        <div class="text-center mt-4">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+                <button type="submit" class="btn btn-lg btn-primary action-button">Yes, log me out</button>
+                <a href="/" class="btn btn-outline-secondary mt-3 d-block">No, return to home</a>
             </form>
-        }
-        else
-        {
-            <p>You have successfully logged out of the application.</p>
-        }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Page Styles */
+    .user-profile-container {
+        font-family: 'Sora', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px 10px;
     }
-</header>
+    
+    /* Card Design */
+    .content-card {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        padding: 30px;
+        border-top: 5px solid #3498db;
+    }
+    
+    /* Card Header */
+    .card-header {
+        margin-bottom: 25px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 15px;
+    }
+    
+    .card-title {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    
+    .card-subtitle {
+        color: #7f8c8d;
+        font-size: 1rem;
+    }
+    
+    /* Button Styling */
+    .action-button {
+        background-color: #3498db;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        padding: 12px 25px;
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 10px 20px;
+        color: #7f8c8d;
+        border-color: #dfe4ea;
+    }
+</style>

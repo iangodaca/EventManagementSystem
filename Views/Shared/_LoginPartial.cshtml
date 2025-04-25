@@ -7,15 +7,31 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item d-flex align-items-center gap-2">
-            <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hello @UserManager.GetUserAsync(User).Result.FirstName!
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/images/default-avatar.png" alt="Profile" class="rounded-circle" width="32" height="32"/>
+                <span class="text-light">@UserManager.GetUserAsync(User).Result.FirstName</span>
             </a>
-            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="btn btn-link logout-icon p-0 m-0" title="Logout">
-                    <i class="bi bi-box-arrow-right fs-5"></i>
-                </button>
-            </form>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="bi bi-person me-2"></i>Profile Details
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                        <i class="bi bi-gear me-2"></i>Manage Account
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmLogout()">
+                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                    </a>
+                    <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" style="display:none;">
+                    </form>
+                </li>
+            </ul>
         </li>
     }
     else
@@ -38,4 +54,25 @@
     .logout-icon:hover i {
         color: red;
     }
+    
+    .dropdown-item {
+        transition: all 0.3s ease;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+    }
+    
+    .dropdown-item.text-danger:hover {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
 </style>
+
+<script>
+    function confirmLogout() {
+        if (confirm("Are you sure you want to logout?")) {
+            document.getElementById('logoutForm').submit();
+        }
+    }
+</script>

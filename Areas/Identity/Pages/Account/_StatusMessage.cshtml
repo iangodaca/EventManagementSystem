@@ -3,8 +3,46 @@
 @if (!String.IsNullOrEmpty(Model))
 {
     var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+    var icon = statusMessageClass == "danger" ? "exclamation-triangle" : "check-circle";
+    
+    <div class="status-message alert alert-@statusMessageClass alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-@icon me-2"></i>
+            <div>@Model</div>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        @Model
     </div>
 }
+
+<style>
+    .status-message {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        font-family: 'Sora', sans-serif;
+        font-weight: 500;
+        border: none;
+    }
+    
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .btn-close {
+        opacity: 0.5;
+        transition: opacity 0.2s;
+    }
+    
+    .btn-close:hover {
+        opacity: 0.8;
+    }
+</style>

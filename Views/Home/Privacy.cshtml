@@ -4,62 +4,121 @@
 
 <div class="container py-5">
     <div class="text-center mb-4">
-        <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
+        <h1 class="fw-bold text-primary"><i class="bi bi-shield-lock-fill me-2"></i>@ViewData["Title"]</h1>
     </div>
 
-    <div class="bg-white p-4 rounded shadow-sm">
-        <section class="mb-4">
-            <h4 class="text-dark">1. Introduction</h4>
-            <p class="text-secondary">
-                At Eventive, your privacy is important to us. This privacy policy explains what personal information we collect,
-                how we use it, and the choices you have regarding your information.
-            </p>
-        </section>
+    <div class="accordion bg-white p-4 rounded shadow-sm" id="privacyAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                    <i class="bi bi-info-circle-fill me-2 text-primary"></i>1. Introduction
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show">
+                <div class="accordion-body text-secondary">
+                    At Eventive, your privacy is important to us. This privacy policy explains what personal information we collect,
+                    how we use it, and the choices you have regarding your information.
+                </div>
+            </div>
+        </div>
 
-        <section class="mb-4">
-            <h4 class="text-dark">2. Information We Collect</h4>
-            <ul class="text-secondary">
-                <li>Personal information (name, email, contact info)</li>
-                <li>Event preferences and registration history</li>
-                <li>Usage data (pages visited, actions taken)</li>
-            </ul>
-        </section>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                    <i class="bi bi-person-lines-fill me-2 text-primary"></i>2. Information We Collect
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body text-secondary">
+                    <ul>
+                        <li>Personal information (name, email, contact info)</li>
+                        <li>Event preferences and registration history</li>
+                        <li>Usage data (pages visited, actions taken)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-        <section class="mb-4">
-            <h4 class="text-dark">3. How We Use Your Information</h4>
-            <p class="text-secondary">
-                We use your information to provide event recommendations, send updates, and improve our services. We never sell your data.
-            </p>
-        </section>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                    <i class="bi bi-gear-fill me-2 text-primary"></i>3. How We Use Your Information
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse">
+                <div class="accordion-body text-secondary">
+                    We use your information to provide event recommendations, send updates, and improve our services. We never sell your data.
+                </div>
+            </div>
+        </div>
 
-        <section class="mb-4">
-            <h4 class="text-dark">4. Your Rights</h4>
-            <p class="text-secondary">
-                You have the right to access, update, or delete your personal information at any time. Contact our support for assistance.
-            </p>
-        </section>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                    <i class="bi bi-shield-check me-2 text-primary"></i>4. Your Rights
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse">
+                <div class="accordion-body text-secondary">
+                    You have the right to access, update, or delete your personal information at any time. Contact our support for assistance.
+                </div>
+            </div>
+        </div>
 
-        <section class="mb-4">
-            <h4 class="text-dark">5. Contact Us</h4>
-            <p class="text-secondary">
-                If you have questions about this policy, reach out at <a href="mailto:support@eventive.com">support@eventive.com</a>.
-            </p>
-        </section>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                    <i class="bi bi-envelope-fill me-2 text-primary"></i>5. Contact Us
+                </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse">
+                <div class="accordion-body text-secondary">
+                    If you have questions about this policy, reach out at
+                    <a href="mailto:support@eventive.com">support@eventive.com</a>.
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
     body {
         animation: fadeIn 1s ease-in;
-        background-color: powderblue;
+        background-color: #e0f7fa;
         font-family: 'Segoe UI', sans-serif;
     }
 
-    h4 {
+    h1, .accordion-button {
         font-weight: 600;
     }
 
+    .accordion-button {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+        .accordion-button:hover {
+            background-color: #e3f2fd;
+        }
+
     .container {
         max-width: 900px;
+    }
+
+    keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     }
 </style>
