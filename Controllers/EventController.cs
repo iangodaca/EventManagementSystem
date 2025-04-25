@@ -67,10 +67,37 @@
         [Authorize]
 
         // GET: /Events
-        public IActionResult Index()
+        public IActionResult Index(string search, string category, DateTime? fromDate, DateTime? toDate)
         {
-            var events = _context.Events.ToList();
-            return View(events);
+            var events = _context.Events.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                events = events.Where(e => e.EventTitle.Contains(search));
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                events = events.Where(e => e.EventCategory.Contains(category));
+            }
+
+            if (fromDate.HasValue)
+            {
+                events = events.Where(e => e.EventDate >= fromDate.Value);
+            }
+
+            if (toDate.HasValue)
+            {
+                events = events.Where(e => e.EventDate <= toDate.Value);
+            }
+
+            // Save the filters back to ViewBag so you can keep them in the form inputs
+            ViewBag.Search = search;
+            ViewBag.Category = category;
+            ViewBag.FromDate = fromDate?.ToString("yyyy-MM-dd");
+            ViewBag.ToDate = toDate?.ToString("yyyy-MM-dd");
+
+            return View(events.ToList());
         }
 
         [Authorize]
